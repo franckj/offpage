@@ -3,495 +3,539 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Offpage — earned distribution for people who publish too much and get read too little</title>
   <meta name="description" content="Most of your published posts have never been linked to, quoted, or mentioned. Offpage finds the invisible ones and earns the podcast bookings, newsletter mentions and expert quotes that make them count. Digital PR without paid links." />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- NOTE: self-host these as woff2 subsets before launch (blueprint §5). -->
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <title>Offpage — earned distribution, no paid links</title>
+  <style>
+    :root {
+      /* semantic tokens (light / paper) */
+      --bg: #e9ebef;
+      --panel: #f7f8fa;
+      --raise: #ffffff;
+      --text: #15171c;
+      --muted: #6b7280;
+      --ghost: #a3a9b4;
+      --line: rgba(21, 23, 28, 0.12);
+      --btn-bg: #15171c;
+      --btn-fg: #ffffff;
+      /* signal colors — data only, never decorative */
+      --earned: #0e5c3f;
+      --outreach: #c97a05;
+      --alert: #b3261e;
+  
+      --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  
+      --container: 1160px;
+      --sy: 104px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1115;
+        --panel: #171a20;
+        --raise: #1c2029;
+        --text: #e9ebef;
+        --muted: #8a919e;
+        --ghost: #5b6270;
+        --line: rgba(233, 235, 239, 0.14);
+        --btn-bg: #e9ebef;
+        --btn-fg: #15171c;
+        --earned: #4bbf8f;
+        --outreach: #e0a94a;
+        --alert: #ef6b62;
+      }
+    }
+    :root[data-theme="light"] {
+      --bg: #e9ebef; --panel: #f7f8fa; --raise: #fff; --text: #15171c;
+      --muted: #6b7280; --ghost: #a3a9b4; --line: rgba(21,23,28,.12);
+      --btn-bg: #15171c; --btn-fg: #fff; --earned: #0e5c3f; --outreach: #c97a05; --alert: #b3261e;
+    }
+    :root[data-theme="dark"] {
+      --bg: #0f1115; --panel: #171a20; --raise: #1c2029; --text: #e9ebef;
+      --muted: #8a919e; --ghost: #5b6270; --line: rgba(233,235,239,.14);
+      --btn-bg: #e9ebef; --btn-fg: #15171c; --earned: #4bbf8f; --outreach: #e0a94a; --alert: #ef6b62;
+    }
+  
+    * , *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.02em; line-height: 1.04; text-wrap: balance; }
+    p { margin: 0; }
+    a { color: inherit; }
+    .mono { font-family: var(--font-mono); }
+  
+    .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+    .section { padding: var(--sy) 0; }
+    .eyebrow {
+      font-family: var(--font-mono); font-size: 12px; text-transform: uppercase;
+      letter-spacing: 0.09em; color: var(--ghost); margin-bottom: 16px;
+    }
+    .lede { font-size: 18px; max-width: 62ch; margin-top: 20px; color: var(--text); }
+    .section h2 { font-size: clamp(30px, 4vw, 42px); max-width: 22ch; }
+  
+    /* nav */
+    .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(8px); border-bottom: 1px solid transparent; transition: border-color .2s; }
+    .nav.scrolled { border-bottom-color: var(--line); }
+    .nav__in { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .wordmark { font-weight: 800; font-size: 20px; letter-spacing: -0.03em; text-decoration: none; color: var(--text); }
+    .nav__links { display: flex; align-items: center; gap: 26px; }
+    .nav__links a { text-decoration: none; font-size: 15px; color: var(--text); }
+    .nav__links a:hover { color: var(--muted); }
+  
+    .btn { display: inline-flex; align-items: center; gap: 8px; font: 500 15px var(--font-body);
+      padding: 12px 18px; border-radius: 6px; border: 1px solid transparent; cursor: pointer;
+      text-decoration: none; background: var(--btn-bg); color: var(--btn-fg); transition: opacity .15s; }
+    .btn:hover { opacity: .9; }
+    .btn--sm { padding: 8px 14px; font-size: 14px; }
+    .btn--ghost { background: transparent; color: var(--text); border-color: var(--line); }
+    .btn--block { width: 100%; justify-content: center; }
+    a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+  
+    /* hero */
+    .hero { padding: 72px 0 88px; }
+    .hero__grid { display: grid; grid-template-columns: 55fr 45fr; gap: 56px; align-items: center; }
+    .hero h1 { font-size: clamp(36px, 6vw, 60px); margin: 14px 0 22px; }
+    .hero__sub { font-size: clamp(17px, 2.2vw, 20px); max-width: 52ch; }
+  
+    .check { display: flex; gap: 10px; margin: 30px 0 8px; max-width: 470px; }
+    .check__input { flex: 1; font: 400 18px var(--font-mono); padding: 13px 16px; color: var(--text);
+      background: var(--panel); border: 1px solid var(--ghost); border-radius: 6px; }
+    .check__input::placeholder { color: var(--ghost); }
+    .check__input:focus { outline: none; border-color: var(--text); box-shadow: 0 0 0 3px color-mix(in srgb, var(--text) 14%, transparent); }
+    .micro { font-size: 14px; color: var(--ghost); margin-top: 6px; }
+    .result { font: 400 13px var(--font-mono); margin-top: 12px; }
+    .result.err { color: var(--alert); }
+    .trust { font-size: 14px; margin-top: 16px; }
+    .trust .x { font-family: var(--font-mono); color: var(--alert); margin-right: 6px; }
+  
+    /* ledger */
+    .ledger { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+      padding: 22px 22px 18px; font-family: var(--font-mono); font-size: 13px; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
+    .ledger__head { display: flex; justify-content: space-between; align-items: baseline;
+      padding-bottom: 14px; margin-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .ledger__title { font-weight: 600; letter-spacing: .04em; }
+    .ledger__dom { color: var(--ghost); }
+    .ledger__ch { display: grid; grid-template-columns: 1fr 40px auto; gap: 8px; color: var(--ghost);
+      font-size: 11px; letter-spacing: .06em; padding-bottom: 8px; }
+    .row { display: grid; grid-template-columns: 1fr 40px auto; gap: 8px; padding: 5px 0;
+      align-items: baseline; transition: color .4s ease; }
+    .row .c { text-align: right; font-variant-numeric: tabular-nums; }
+    .row .s { text-align: right; white-space: nowrap; }
+    .row--earned { color: var(--text); }
+    .row--earned .s { color: var(--earned); }
+    .row--inv.faded { color: var(--ghost); }
+    .ledger__sum { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); text-align: right; }
+    .ledger__sum .fig { font-weight: 600; font-size: 28px; color: var(--alert); font-variant-numeric: tabular-nums; }
+    .ledger__note { font-family: var(--font-mono); font-size: 13px; color: var(--ghost); margin-top: 14px; }
+  
+    /* strip */
+    .strip { background: var(--panel); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .strip__grid { display: grid; grid-template-columns: 1fr 1.2fr 1fr; align-items: center; min-height: 96px; }
+    .strip__c { padding: 20px 28px; }
+    .strip__c + .strip__c { border-left: 1px solid var(--line); }
+    .strip__v { font-family: var(--font-mono); text-transform: uppercase; color: var(--ghost);
+      font-size: 12px; letter-spacing: .05em; line-height: 1.8; }
+    .strip__q { font-style: italic; font-size: 16px; }
+    .strip__attr { display: block; margin-top: 8px; font: 400 12px var(--font-mono); font-style: normal; color: var(--ghost); }
+    .strip__s { display: flex; flex-direction: column; gap: 6px; font: 400 13px var(--font-mono); color: var(--ghost); }
+    .strip__s b { color: var(--text); font-weight: 600; }
+  
+    /* problem */
+    .pains { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 44px; }
+    .pain__l { font: 600 15px var(--font-mono); margin-bottom: 8px; }
+    .archive { margin-top: 52px; }
+    .archive__g { display: grid; grid-template-columns: repeat(20, 1fr); gap: 5px; max-width: 640px; }
+    .cell { aspect-ratio: 1; background: var(--ghost); opacity: .5; border-radius: 2px; }
+    .cell.ink { background: var(--text); opacity: 1; }
+    .archive__cap { font: 400 13px var(--font-mono); color: var(--ghost); margin-top: 14px; }
+  
+    /* solution */
+    .benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 44px; }
+    .benefit h3 { font-size: 20px; margin-bottom: 10px; }
+    .preview { display: grid; grid-template-columns: 1fr 1fr; margin-top: 52px; border: 1px solid var(--line);
+      border-radius: 10px; overflow: hidden; background: var(--panel); font-family: var(--font-mono); font-size: 13px; }
+    .preview__p { padding: 24px; }
+    .preview__p + .preview__p { border-left: 1px solid var(--line); }
+    .preview__l { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ghost); margin-bottom: 16px; }
+    .m { padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .m:last-child { border-bottom: none; }
+    .m .post { color: var(--text); }
+    .m .tgt { display: block; margin-top: 4px; color: var(--ghost); }
+    .fit { color: var(--earned); font-weight: 600; }
+  
+    /* how */
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 44px; }
+    .step__n { display: inline-flex; align-items: center; gap: 10px; font: 600 14px var(--font-mono); margin-bottom: 14px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text); }
+    .step:nth-child(3) .dot { background: var(--outreach); }
+    .step:nth-child(4) .dot { background: var(--earned); }
+    .step h3 { font-size: 19px; margin-bottom: 8px; }
+    .step p { font-size: 15px; }
+  
+    /* features */
+    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 44px; }
+    .feat { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 26px; }
+    .feat h3 { font-size: 20px; margin-bottom: 10px; }
+    .feat p { font-size: 15px; }
+    .feat__v { margin-top: 16px; font: 400 12px var(--font-mono); color: var(--ghost);
+      background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 12px; }
+    .feat__v .ink { color: var(--text); } .feat__v .grn { color: var(--earned); }
+  
+    /* proof */
+    .wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 44px; }
+    .pl { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 20px; font: 400 13px var(--font-mono); }
+    .pl__o { font-weight: 600; letter-spacing: .03em; margin-bottom: 10px; }
+    .pl__l { color: var(--ghost); margin-bottom: 4px; } .pl__l .ink { color: var(--text); }
+    .pl__d { margin-top: 10px; } .pl__d .b { color: var(--alert); } .pl__d .a { color: var(--earned); font-weight: 600; }
+    .founder { margin-top: 40px; border-left: 3px solid var(--text); padding: 6px 0 6px 22px; max-width: 62ch; font-size: 17px; }
+    .founder .sig { display: block; margin-top: 12px; font: 400 13px var(--font-mono); color: var(--ghost); }
+  
+    /* pricing */
+    .psub { color: var(--muted); margin-top: 10px; font-size: 16px; }
+    .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 44px; align-items: start; }
+    .tier { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 30px 26px; }
+    .tier--hi { border: 2px solid var(--text); }
+    .tier__n { font: 400 13px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ghost); }
+    .tier__p { font: 600 34px var(--font-mono); margin: 10px 0 2px; }
+    .tier__cad { font: 400 13px var(--font-mono); color: var(--ghost); margin-bottom: 20px; }
+    .tier ul { list-style: none; padding: 0; margin: 0 0 22px; font-size: 15px; }
+    .tier li { padding: 7px 0; border-bottom: 1px solid var(--line); }
+    .tier li:last-child { border-bottom: none; }
+    .tier__best { font-size: 14px; color: var(--muted); margin-top: 14px; }
+    .tier__risk { font: 400 13px var(--font-mono); margin-top: 12px; line-height: 1.5; }
+    .ent { margin-top: 30px; font-size: 16px; }
+  
+    /* faq */
+    .faq { max-width: 800px; margin-top: 36px; }
+    .fitem { border-bottom: 1px solid var(--line); }
+    .fitem > summary { list-style: none; cursor: pointer; font: 500 18px var(--font-body); color: var(--text);
+      padding: 22px 40px 22px 0; position: relative; }
+    .fitem > summary::-webkit-details-marker { display: none; }
+    .fitem > summary::after { content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+      font-family: var(--font-mono); color: var(--ghost); font-size: 22px; }
+    .fitem[open] > summary::after { content: "\2013"; }
+    .fa { padding: 0 0 24px; max-width: 68ch; color: var(--text); }
+  
+    /* final */
+    .final { background: #15171c; color: #fff; position: relative; overflow: hidden; }
+    .final__wm { position: absolute; inset: 0; opacity: .06; font: 400 13px/2 var(--font-mono);
+      padding: 40px; white-space: pre; pointer-events: none; color: #fff; }
+    .final__in { position: relative; z-index: 1; max-width: 640px; }
+    .final h2 { color: #fff; font-size: clamp(30px, 5vw, 48px); max-width: 18ch; }
+    .final__sup { color: #d7dae0; font-size: 18px; max-width: 54ch; margin-top: 22px; }
+    .final .check { margin-top: 30px; }
+    .final .check__input { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.3); color: #fff; }
+    .final .check__input::placeholder { color: rgba(233,235,239,.6); }
+    .final .btn { background: #fff; color: #15171c; }
+    .final__risk { font: 400 13px var(--font-mono); color: rgba(233,235,239,.7); margin-top: 16px; }
+    .final__sec { display: inline-block; margin-top: 24px; color: #fff; text-decoration: underline; font-size: 16px; }
+  
+    /* footer */
+    .footer { background: var(--panel); border-top: 1px solid var(--line); padding: 60px 0 40px; }
+    .footer__g { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 32px; }
+    .footer__l { font: 400 12px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ghost); margin-bottom: 14px; }
+    .footer__c a { display: block; text-decoration: none; font-size: 14px; padding: 4px 0; color: var(--text); }
+    .footer__c a:hover { color: var(--muted); }
+    .footer__bl { font-size: 14px; max-width: 30ch; }
+    .footer__meta { font: 400 12px var(--font-mono); color: var(--ghost); margin-top: 8px; }
+    .footer__b { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 44px; padding-top: 24px;
+      border-top: 1px solid var(--line); font: 400 12px var(--font-mono); color: var(--ghost); }
+    .footer__b .perm { color: var(--text); }
+  
+    @media (max-width: 860px) {
+      :root { --sy: 60px; }
+      .nav__links a:not(.btn) { display: none; }
+      .hero { padding: 36px 0 52px; }
+      .hero__grid { display: flex; flex-direction: column; gap: 30px; }
+      .hero__head { order: 1; } .hero__ledger { order: 2; } .hero__cta { order: 3; }
+      .ledger__sum .fig { font-size: 34px; }
+      .strip__grid { grid-template-columns: 1fr; }
+      .strip__c + .strip__c { border-left: none; border-top: 1px solid var(--line); }
+      .pains, .benefits, .steps, .features, .wall, .tiers { grid-template-columns: 1fr; }
+      .preview { grid-template-columns: 1fr; }
+      .preview__p + .preview__p { border-left: none; border-top: 1px solid var(--line); }
+      .footer__g { grid-template-columns: 1fr 1fr; }
+      .archive__g { grid-template-columns: repeat(12, 1fr); }
+      .check { flex-direction: column; max-width: none; }
+      .check .btn { width: 100%; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
+<nav class="nav" id="nav">
+  <div class="container nav__in">
+    <a href="#top" class="wordmark">Offpage</a>
+    <div class="nav__links">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#top" class="btn btn--sm">Check my site</a>
+    </div>
+  </div>
+</nav>
 
-  <!-- ================= NAV ================= -->
-  <nav class="nav" id="nav">
-    <div class="container nav__inner">
-      <a href="/" class="wordmark">Offpage</a>
-      <div class="nav__links">
-        <a href="#how">How it works</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
-        <a href="#hero" class="btn btn--sm">Check my site</a>
+<header class="hero" id="top">
+  <div class="container hero__grid">
+    <div class="hero__head">
+      <div class="eyebrow">Earned distribution · No paid links</div>
+      <h1>Your content isn't bad. It's invisible.</h1>
+      <p class="hero__sub">You've published dozens of posts since you turned on your AI stack. Most of them have never been linked to, quoted, or mentioned by anyone. Offpage finds the invisible ones, then earns the podcast bookings, newsletter mentions, and expert quotes that make the rest of them count.</p>
+    </div>
+    <div class="hero__cta">
+      <form class="check" id="f1">
+        <input class="check__input" id="i1" type="text" inputmode="url" placeholder="yourpractice.com" aria-label="Your domain" autocomplete="off" />
+        <button class="btn" type="submit">Check my site →</button>
+      </form>
+      <p class="micro">Free. No card, no email. Results in about 20 seconds.</p>
+      <p class="result" id="r1" hidden></p>
+      <p class="trust"><span class="x">✕</span>We do not buy, sell, or exchange links. Not as an upsell. Not ever.</p>
+    </div>
+    <div class="hero__ledger">
+      <div class="ledger" id="ledger">
+        <div class="ledger__head"><span class="ledger__title">INVISIBILITY LEDGER</span><span class="ledger__dom" id="dom">northsidedental.com — sample</span></div>
+        <div class="ledger__ch"><span>PATH</span><span style="text-align:right">REF</span><span style="text-align:right">STATUS</span></div>
+        <div id="rows">
+          <div class="row row--inv"><span>/blog/why-teeth-shift-adults</span><span class="c">0</span><span class="s">—</span></div>
+          <div class="row row--inv"><span>/blog/invisalign-vs-braces-cost</span><span class="c">0</span><span class="s">—</span></div>
+          <div class="row row--earned"><span>/blog/dental-anxiety-guide</span><span class="c">3</span><span class="s">Earned · Ask The Dentist</span></div>
+          <div class="row row--inv"><span>/blog/what-to-eat-after-extraction</span><span class="c">0</span><span class="s">—</span></div>
+          <div class="row row--inv"><span>/blog/whitening-safety-2026</span><span class="c">0</span><span class="s">—</span></div>
+          <div class="row row--earned"><span>/blog/sedation-options-explained</span><span class="c">1</span><span class="s">Earned · Dental Hacks #418</span></div>
+          <div class="row row--inv"><span>/blog/gum-recession-early-signs</span><span class="c">0</span><span class="s">—</span></div>
+          <div class="row row--inv"><span>/blog/cost-of-implants-breakdown</span><span class="c">0</span><span class="s">—</span></div>
+        </div>
+        <div class="ledger__sum"><span class="fig" id="fig">18 of 20</span> posts invisible</div>
+      </div>
+      <p class="ledger__note">First 10 audits are run by hand by the founder. 4 slots left this month.</p>
+    </div>
+  </div>
+</header>
+
+<section class="strip">
+  <div class="container strip__grid">
+    <div class="strip__c strip__v">Dental · Legal · Real estate · Financial advisory · Home services</div>
+    <div class="strip__c strip__q">“The audit was the part that stung. I'd paid for 40 posts nobody had ever seen.”<span class="strip__attr">— Solo operator, dental · full attribution on request</span></div>
+    <div class="strip__c strip__s"><span><b>$0</b> spent on paid links</span><span><b>72h</b> average audit turnaround</span><span><b>100%</b> of placements are editorial</span></div>
+  </div>
+</section>
+
+<section class="section" id="problem">
+  <div class="container">
+    <div class="eyebrow">The problem</div>
+    <h2>Google saw the publishing spike. It didn't see anything behind it.</h2>
+    <p class="lede">Twenty posts a month is a signal. When none of them attract a single link, mention, or citation, it's the wrong signal. A batch of content that nobody in the world references reads as low-value at best and manufactured at worst. Publishing more of it doesn't fix the pattern. It confirms it.</p>
+    <div class="pains">
+      <div class="pain"><div class="pain__l">0 REFERRING DOMAINS</div><p>You fired the agency, wired up the AI stack, and tripled output. Every post landed with no outside link, no mention, no citation.</p></div>
+      <div class="pain"><div class="pain__l">FLAT</div><p>Traffic didn't move. Not down — flat, which is worse, because it means the work is invisible rather than wrong.</p></div>
+      <div class="pain"><div class="pain__l">NOT CITED</div><p>AI answer engines quote sources that other sources reference. Content nothing points at doesn't get pulled into answers either. You're now invisible in two places instead of one.</p></div>
+      <div class="pain"><div class="pain__l">SUNK</div><p>At even 3 hours of review per post, 40 invisible posts is a full month of your working life spent on assets nobody has ever seen.</p></div>
+    </div>
+    <div class="archive"><div class="archive__g" id="grid" aria-hidden="true"></div><p class="archive__cap">A typical 12-month archive. Ink = has ever been linked to.</p></div>
+  </div>
+</section>
+
+<section class="section" id="solution">
+  <div class="container">
+    <div class="eyebrow">The fix</div>
+    <h2>Stop adding to the pile. Start getting the pile cited.</h2>
+    <p class="lede">Offpage is not another content tool and not a link vendor. We audit what you've already published to find the posts worth defending, then take them to the people who actually publish and broadcast in your field — podcast hosts booking guests, newsletter editors hunting for a good link, journalists who need a quotable expert this week. You get placements you could show a state licensing board without flinching.</p>
+    <div class="benefits">
+      <div class="benefit"><h3>You find out where the money went.</h3><p>A named list of every post with zero outside signal, ranked by how much effort it cost you. Most operators have never seen this number.</p></div>
+      <div class="benefit"><h3>You skip the pitching.</h3><p>We hold the relationships and write the pitches. You approve angles and show up to the interview. No cold email tooling to learn, no HARO inbox to triage at 6am.</p></div>
+      <div class="benefit"><h3>You get assets that keep working.</h3><p>A podcast appearance, a newsletter mention, and a quote in a trade publication are credibility your competitors can't buy — and links that don't disappear when a vendor's network gets deindexed.</p></div>
+    </div>
+    <div class="preview">
+      <div class="preview__p">
+        <div class="preview__l">Page 1 · Invisibility ledger</div>
+        <div class="mono" style="line-height:1.9;color:var(--ghost)">
+          /blog/why-teeth-shift-adults &nbsp; 0<br>/blog/invisalign-vs-braces &nbsp; 0<br>
+          <span style="color:var(--text)">/blog/dental-anxiety-guide &nbsp; 3</span><br>/blog/whitening-safety-2026 &nbsp; 0<br>
+          <span style="color:var(--text)">/blog/sedation-options &nbsp; 1</span><br>/blog/gum-recession-signs &nbsp; 0
+        </div>
+      </div>
+      <div class="preview__p">
+        <div class="preview__l">Page 2 · Placement match</div>
+        <div class="m"><span class="post">/blog/sedation-options-explained</span><span class="tgt">Dental Hacks Podcast · <span class="fit">FIT 92</span> — Ep. 418 covered sedation myths; your post has the cost data they lacked.</span></div>
+        <div class="m"><span class="post">/blog/cost-of-implants-breakdown</span><span class="tgt">The Waiting Room (newsletter) · <span class="fit">FIT 87</span> — runs a monthly “what things cost” slot with no dental source.</span></div>
+        <div class="m"><span class="post">/blog/dental-anxiety-guide</span><span class="tgt">Local health reporter, metro daily · <span class="fit">FIT 81</span> — filed twice on anxiety this quarter.</span></div>
       </div>
     </div>
-  </nav>
+  </div>
+</section>
 
-  <!-- ================= HERO ================= -->
-  <header class="hero" id="hero">
-    <div class="container hero__grid">
-      <div class="hero__copy">
-        <div class="hero__head">
-          <div class="eyebrow">Earned distribution · No paid links</div>
-          <h1>Your content isn't bad. It's invisible.</h1>
-          <p class="hero__sub">
-            You've published dozens of posts since you turned on your AI stack. Most of them have
-            never been linked to, quoted, or mentioned by anyone. Offpage finds the invisible ones,
-            then earns the podcast bookings, newsletter mentions, and expert quotes that make the
-            rest of them count.
-          </p>
-        </div>
+<section class="section" id="how">
+  <div class="container">
+    <div class="eyebrow">Process</div>
+    <h2>Four steps. You do about an hour of work.</h2>
+    <div class="steps">
+      <div class="step"><div class="step__n"><span class="dot"></span>01</div><h3>Run the free check.</h3><p>Enter your domain. We crawl your published posts and count referring domains for each. You see the invisible count on screen in about 20 seconds.</p></div>
+      <div class="step"><div class="step__n"><span class="dot"></span>02</div><h3>Buy the audit ($200).</h3><p>A human reviews the crawl. You get the full ranked list, why each post never earned a mention, and ten named placement targets matched to specific posts of yours.</p></div>
+      <div class="step"><div class="step__n"><span class="dot"></span>03</div><h3>Submit your best posts.</h3><p>Pick the posts you want pushed. We build the angle, write the pitch, and run the outreach against our vetted contact database. You approve before anything sends.</p></div>
+      <div class="step"><div class="step__n"><span class="dot"></span>04</div><h3>Show up and get placed.</h3><p>You record the episode or answer the reporter's three questions. We handle scheduling and follow-up. You're billed per placement that publishes — $500 to $1,500 by outlet.</p></div>
+    </div>
+  </div>
+</section>
 
-        <div class="hero__cta">
-          <form class="check" id="check-form" novalidate>
-            <input class="check__input" id="check-input" type="text" inputmode="url"
-                   placeholder="yourpractice.com" aria-label="Your domain" autocomplete="off" />
-            <button class="btn" type="submit">Check my site →</button>
-          </form>
-          <p class="microcopy">Free. No card, no email. Results in about 20 seconds.</p>
-          <p class="result-note" id="check-result" hidden></p>
-          <p class="trust-line">
-            <span class="x mono">✕</span>We do not buy, sell, or exchange links. Not as an upsell. Not ever.
-          </p>
-        </div>
+<section class="section" id="features">
+  <div class="container">
+    <div class="eyebrow">Inside Offpage</div>
+    <h2>The parts that make it work</h2>
+    <div class="features">
+      <div class="feat"><h3>Invisibility Audit</h3><p>Every post you've published since the AI stack went live, crawled and scored for external signal. Ranked by wasted effort so you know what to defend first and what to let go.</p><div class="feat__v">/blog/post-a &nbsp; 0<br><span class="ink">/blog/post-b &nbsp; 3</span><br>/blog/post-c &nbsp; 0 &nbsp;· ranked by wasted effort</div></div>
+      <div class="feat"><h3>Placement Matching</h3><p>We don't blast a list. Each post is matched to specific hosts and editors whose recent output has a gap your post fills, with the reason written out so you can judge the fit yourself.</p><div class="feat__v">/blog/post-b → Dental Hacks · <span class="grn">FIT 92</span><br>reason: covered the myth, missing the cost data</div></div>
+      <div class="feat"><h3>Vetted contact database</h3><p>Podcast hosts, newsletter editors and reporters we've actually placed with, filtered by vertical. Not a scraped list.</p><div class="feat__v">NAME&nbsp;········ · outlet: —<br>beat: anxiety / cost / access</div></div>
+      <div class="feat"><h3>Pitch writing</h3><p>We write the angle and the email. You approve it in one click before anything sends. Your name, your voice, our relationships.</p><div class="feat__v">→ “Quick angle for Ep. 4xx…”<br>← approved ✓</div></div>
+      <div class="feat"><h3>Visibility tracking</h3><p>Monthly report on which posts gained referring domains, which placements published, and which are still pending — the literal before/after of the audit.</p><div class="feat__v">/blog/post-a &nbsp; <span class="grn">2</span><br><span class="ink">/blog/post-b &nbsp; 6</span><br>/blog/post-c &nbsp; <span class="grn">1</span> &nbsp;· more ink, less ghost</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="proof">
+  <div class="container">
+    <div class="eyebrow">Results</div>
+    <h2>Placements, not promises.</h2>
+    <div class="wall">
+      <div class="pl"><div class="pl__o">DENTAL HACKS · EPISODE 418</div><div class="pl__l">Guest: <span class="ink">Dr. ——, Northside Dental</span></div><div class="pl__l">Source post: <span class="ink">/blog/sedation-options-explained</span></div><div class="pl__d">Referring domains <span class="b">0</span> → <span class="a">6</span></div></div>
+      <div class="pl"><div class="pl__o">THE WAITING ROOM · NEWSLETTER</div><div class="pl__l">Feature: <span class="ink">“What a dental implant really costs”</span></div><div class="pl__l">Source post: <span class="ink">/blog/cost-of-implants-breakdown</span></div><div class="pl__d">Referring domains <span class="b">0</span> → <span class="a">4</span></div></div>
+      <div class="pl"><div class="pl__o">METRO DAILY · HEALTH DESK</div><div class="pl__l">Quote: <span class="ink">expert source on dental anxiety</span></div><div class="pl__l">Source post: <span class="ink">/blog/dental-anxiety-guide</span></div><div class="pl__d">Referring domains <span class="b">3</span> → <span class="a">9</span></div></div>
+    </div>
+    <p class="ledger__note" style="margin-top:22px">Sample cards shown for structure. The wall goes live with real, permissioned placements only.</p>
+    <blockquote class="founder">Right now every audit is run by hand, by me. If your posts come back mostly invisible, I'll tell you which ones are worth defending and which to let go — and if fewer than half come back invisible, distribution isn't your problem and I'll say so in writing.<span class="sig">— Founder, Offpage</span></blockquote>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="eyebrow">Pricing</div>
+    <h2>Pay for the diagnosis. Then pay only for what publishes.</h2>
+    <p class="psub">No retainers. No minimum term. No paid links at any tier.</p>
+    <div class="tiers">
+      <div class="tier tier--hi">
+        <div class="tier__n">Audit</div><div class="tier__p">$200</div><div class="tier__cad">one-time</div>
+        <ul><li>Full crawl of published posts</li><li>Invisibility ledger, ranked</li><li>Why each post never earned a mention</li><li>10 named placement targets matched to your posts</li><li>3 ready-to-send pitch angles</li><li>72-hour turnaround, human-reviewed</li></ul>
+        <a href="#top" class="btn btn--block">Get my audit — $200</a>
+        <p class="tier__best">Best for: anyone who's published 15+ posts and can't explain the flat line.</p>
+        <p class="tier__risk">If fewer than half your posts come back invisible, the audit is free. We'll tell you your content isn't the problem.</p>
       </div>
-
-      <!-- THE LEDGER (signature element) -->
-      <div class="hero__ledger">
-        <div class="ledger" id="ledger">
-          <div class="ledger__head">
-            <span class="ledger__title">INVISIBILITY LEDGER</span>
-            <span class="ledger__domain" id="ledger-domain">northsidedental.com — sample</span>
-          </div>
-          <div class="ledger__colhead">
-            <span>PATH</span><span style="text-align:right">REF</span><span style="text-align:right">STATUS</span>
-          </div>
-          <div class="ledger__rows" id="ledger-rows">
-            <div class="ledger__row ledger__row--invisible"><span>/blog/why-teeth-shift-adults</span><span class="count">0</span><span class="status">—</span></div>
-            <div class="ledger__row ledger__row--invisible"><span>/blog/invisalign-vs-braces-cost</span><span class="count">0</span><span class="status">—</span></div>
-            <div class="ledger__row ledger__row--earned"><span>/blog/dental-anxiety-guide</span><span class="count">3</span><span class="status">Earned · Ask The Dentist</span></div>
-            <div class="ledger__row ledger__row--invisible"><span>/blog/what-to-eat-after-extraction</span><span class="count">0</span><span class="status">—</span></div>
-            <div class="ledger__row ledger__row--invisible"><span>/blog/whitening-safety-2026</span><span class="count">0</span><span class="status">—</span></div>
-            <div class="ledger__row ledger__row--earned"><span>/blog/sedation-options-explained</span><span class="count">1</span><span class="status">Earned · Dental Hacks #418</span></div>
-            <div class="ledger__row ledger__row--invisible"><span>/blog/gum-recession-early-signs</span><span class="count">0</span><span class="status">—</span></div>
-            <div class="ledger__row ledger__row--invisible"><span>/blog/cost-of-implants-breakdown</span><span class="count">0</span><span class="status">—</span></div>
-          </div>
-          <div class="ledger__summary">
-            <span class="figure" id="ledger-figure">18 of 20</span> posts invisible
-          </div>
-        </div>
-        <p class="ledger__note" id="ledger-social">
-          First 10 audits are run by hand by the founder. 4 slots left this month.
-        </p>
+      <div class="tier">
+        <div class="tier__n">Placements</div><div class="tier__p">$500–1,500</div><div class="tier__cad">per placement that publishes</div>
+        <ul><li>Podcast bookings</li><li>Newsletter mentions and features</li><li>Expert quotes in trade and national press</li><li>We write the pitch, run the outreach, handle scheduling</li><li>You approve every angle before it sends</li><li><strong>Billed only when it goes live</strong></li></ul>
+        <a href="#" class="btn btn--ghost btn--block">Talk to us about placements</a>
+        <p class="tier__best">Best for: operators with 5+ posts worth defending. Audit required first.</p>
+      </div>
+      <div class="tier">
+        <div class="tier__n">Tracking</div><div class="tier__p">$100–300</div><div class="tier__cad">per month</div>
+        <ul><li>Monthly re-crawl of your full archive</li><li>Referring domains gained per post</li><li>Placement pipeline status</li><li>Cancel any month</li></ul>
+        <a href="#" class="btn btn--ghost btn--block">Add tracking</a>
+        <p class="tier__best">Best for: anyone running placements continuously.</p>
       </div>
     </div>
-  </header>
+    <p class="ent">Running a multi-location group or a firm with more than five attorneys? We do full strategy engagements from $5,000. <a href="#" style="text-decoration:underline">Book a call</a></p>
+  </div>
+</section>
 
-  <!-- ================= TRUST STRIP ================= -->
-  <section class="strip">
-    <div class="container strip__grid">
-      <div class="strip__cell strip__verticals">
-        Dental · Legal · Real estate · Financial advisory · Home services
-      </div>
-      <div class="strip__cell strip__quote">
-        “The audit was the part that stung. I'd paid for 40 posts nobody had ever seen.”
-        <span class="strip__attr">— Solo operator, dental · full attribution on request</span>
-      </div>
-      <div class="strip__cell strip__stats">
-        <span><b>$0</b> spent on paid links</span>
-        <span><b>72h</b> average audit turnaround</span>
-        <span><b>100%</b> of placements are editorial</span>
-      </div>
+<section class="section" id="faq">
+  <div class="container">
+    <div class="eyebrow">Objections</div>
+    <h2>The questions people actually ask</h2>
+    <div class="faq">
+      <details class="fitem" open><summary>Isn't this just link building with extra steps?</summary><p class="fa">No, and the difference is the part that matters. Link building buys placement on a site that sells placement. We pitch editors and hosts who decide independently whether your angle is worth their audience, and they say no fairly often. That's why the links hold value and why nobody gets a penalty. If we could just buy them, we'd charge you less and sleep worse.</p></details>
+      <details class="fitem"><summary>My content is AI-assisted. Will hosts care?</summary><p class="fa">Hosts book people, not posts. Your post is the evidence that you have something specific to say — the cost breakdown, the local data, the ten years of cases. Nobody has ever asked us which tool drafted a blog post. They ask whether the guest can hold a 40-minute conversation. If your posts are entirely unedited output with no expertise behind them, the audit will say so and we'll tell you not to buy placements yet.</p></details>
+      <details class="fitem"><summary>Do you guarantee placements?</summary><p class="fa">No. Anyone who guarantees editorial placement is either buying it or lying. What we guarantee is that you only pay for placements that actually publish. If we pitch for three months and land nothing, you've spent $200 and we've spent our time.</p></details>
+      <details class="fitem"><summary>$200 for an audit I could run myself in Ahrefs?</summary><p class="fa">You could pull referring domains yourself, and if you already do, you may not need the audit. What the tools stop short of is the second half: which of your posts are worth pitching, which specific hosts and editors have a gap those posts fill, and what the angle is. BuzzSumo tells you what's working for other people. We tell you what to do on Tuesday.</p></details>
+      <details class="fitem"><summary>How long until something lands?</summary><p class="fa">First pitches go out within a week of submission. Podcast bookings typically confirm in 2–5 weeks and record 3–8 weeks out. Newsletter mentions can land in days. Expert quotes depend on who's filing that week. Anyone quoting you a faster number is describing paid placement.</p></details>
+      <details class="fitem"><summary>I'm a lawyer / dentist. Is any of this a compliance problem?</summary><p class="fa">It's the reason clients in regulated fields use us. There's no payment to any publisher, no undisclosed consideration, and no advertorial. You're a source and a guest. We'll supply documentation of the placement process if your bar association or compliance officer wants it. We're not your compliance advisor — run it past yours — but this is the version designed to survive that conversation.</p></details>
+      <details class="fitem"><summary>What if the audit says my content is fine?</summary><p class="fa">Then you've learned something worth more than $200, and we refund it. If fewer than half your posts come back invisible, distribution isn't your bottleneck and we'll say so in writing rather than selling you placements you don't need.</p></details>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ================= PROBLEM ================= -->
-  <section class="section" id="problem">
-    <div class="container">
-      <div class="eyebrow">The problem</div>
-      <h2>Google saw the publishing spike. It didn't see anything behind it.</h2>
-      <p class="lede">
-        Twenty posts a month is a signal. When none of them attract a single link, mention, or
-        citation, it's the wrong signal. A batch of content that nobody in the world references reads
-        as low-value at best and manufactured at worst. Publishing more of it doesn't fix the
-        pattern. It confirms it.
-      </p>
-
-      <div class="pains">
-        <div class="pain">
-          <div class="pain__label mono">0 REFERRING DOMAINS</div>
-          <p>You fired the agency, wired up the AI stack, and tripled output. Every post landed with no outside link, no mention, no citation.</p>
-        </div>
-        <div class="pain">
-          <div class="pain__label mono">FLAT</div>
-          <p>Traffic didn't move. Not down — flat, which is worse, because it means the work is invisible rather than wrong.</p>
-        </div>
-        <div class="pain">
-          <div class="pain__label mono">NOT CITED</div>
-          <p>AI answer engines quote sources that other sources reference. Content nothing points at doesn't get pulled into answers either. You're now invisible in two places instead of one.</p>
-        </div>
-        <div class="pain">
-          <div class="pain__label mono">SUNK</div>
-          <p>At even 3 hours of review per post, 40 invisible posts is a full month of your working life spent on assets nobody has ever seen.</p>
-        </div>
-      </div>
-
-      <div class="archive">
-        <div class="archive__grid" id="archive-grid" aria-hidden="true"></div>
-        <p class="archive__caption">A typical 12-month archive. Ink = has ever been linked to.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= SOLUTION ================= -->
-  <section class="section" id="solution">
-    <div class="container">
-      <div class="eyebrow">The fix</div>
-      <h2>Stop adding to the pile. Start getting the pile cited.</h2>
-      <p class="lede">
-        Offpage is not another content tool and not a link vendor. We audit what you've already
-        published to find the posts worth defending, then take them to the people who actually
-        publish and broadcast in your field — podcast hosts booking guests, newsletter editors
-        hunting for a good link, journalists who need a quotable expert this week. You get placements
-        you could show a state licensing board without flinching.
-      </p>
-
-      <div class="benefits">
-        <div class="benefit">
-          <h3>You find out where the money went.</h3>
-          <p>A named list of every post with zero outside signal, ranked by how much effort it cost you. Most operators have never seen this number.</p>
-        </div>
-        <div class="benefit">
-          <h3>You skip the pitching.</h3>
-          <p>We hold the relationships and write the pitches. You approve angles and show up to the interview. No cold email tooling to learn, no HARO inbox to triage at 6am.</p>
-        </div>
-        <div class="benefit">
-          <h3>You get assets that keep working.</h3>
-          <p>A podcast appearance, a newsletter mention, and a quote in a trade publication are credibility your competitors can't buy — and links that don't disappear when a vendor's network gets deindexed.</p>
-        </div>
-      </div>
-
-      <div class="audit-preview">
-        <div class="audit-preview__page">
-          <div class="audit-preview__label">Page 1 · Invisibility ledger</div>
-          <div class="mono" style="font-size:13px;line-height:1.9;color:var(--ghost)">
-            /blog/why-teeth-shift-adults &nbsp; 0<br />
-            /blog/invisalign-vs-braces &nbsp; 0<br />
-            <span style="color:var(--ink)">/blog/dental-anxiety-guide &nbsp; 3</span><br />
-            /blog/whitening-safety-2026 &nbsp; 0<br />
-            <span style="color:var(--ink)">/blog/sedation-options &nbsp; 1</span><br />
-            /blog/gum-recession-signs &nbsp; 0
-          </div>
-        </div>
-        <div class="audit-preview__page">
-          <div class="audit-preview__label">Page 2 · Placement match</div>
-          <div class="match__row">
-            <span class="match__post">/blog/sedation-options-explained</span>
-            <span class="match__target">Dental Hacks Podcast · <span class="fit">FIT 92</span> — Ep. 418 covered sedation myths; your post has the cost data they lacked.</span>
-          </div>
-          <div class="match__row">
-            <span class="match__post">/blog/cost-of-implants-breakdown</span>
-            <span class="match__target">The Waiting Room (newsletter) · <span class="fit">FIT 87</span> — runs a monthly “what things cost” slot with no dental source.</span>
-          </div>
-          <div class="match__row">
-            <span class="match__post">/blog/dental-anxiety-guide</span>
-            <span class="match__target">Local health reporter, metro daily · <span class="fit">FIT 81</span> — filed twice on anxiety this quarter.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= HOW IT WORKS ================= -->
-  <section class="section" id="how">
-    <div class="container">
-      <div class="eyebrow">Process</div>
-      <h2>Four steps. You do about an hour of work.</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step__num mono"><span class="step__dot"></span>01</div>
-          <h3>Run the free check.</h3>
-          <p>Enter your domain. We crawl your published posts and count referring domains for each. You see the invisible count on screen in about 20 seconds.</p>
-        </div>
-        <div class="step">
-          <div class="step__num mono"><span class="step__dot"></span>02</div>
-          <h3>Buy the audit ($200).</h3>
-          <p>A human reviews the crawl. You get the full ranked list, why each post never earned a mention, and ten named placement targets matched to specific posts of yours.</p>
-        </div>
-        <div class="step">
-          <div class="step__num mono"><span class="step__dot"></span>03</div>
-          <h3>Submit your best posts.</h3>
-          <p>Pick the posts you want pushed. We build the angle, write the pitch, and run the outreach against our vetted contact database. You approve before anything sends.</p>
-        </div>
-        <div class="step">
-          <div class="step__num mono"><span class="step__dot"></span>04</div>
-          <h3>Show up and get placed.</h3>
-          <p>You record the episode or answer the reporter's three questions. We handle scheduling and follow-up. You're billed per placement that publishes — $500 to $1,500 by outlet.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= WHAT YOU GET ================= -->
-  <section class="section" id="features">
-    <div class="container">
-      <div class="eyebrow">Inside Offpage</div>
-      <h2>The parts that make it work</h2>
-      <div class="features">
-        <div class="feature feature--wide">
-          <h3>Invisibility Audit</h3>
-          <p>Every post you've published since the AI stack went live, crawled and scored for external signal. Ranked by wasted effort so you know what to defend first and what to let go.</p>
-          <div class="feature__visual mono">
-            /blog/post-a &nbsp; 0<br />
-            <span class="ink">/blog/post-b &nbsp; 3</span><br />
-            /blog/post-c &nbsp; 0 &nbsp;· ranked by wasted effort
-          </div>
-        </div>
-        <div class="feature feature--wide">
-          <h3>Placement Matching</h3>
-          <p>We don't blast a list. Each post is matched to specific hosts and editors whose recent output has a gap your post fills, with the reason written out so you can judge the fit yourself.</p>
-          <div class="feature__visual mono">
-            /blog/post-b → Dental Hacks · <span class="earned">FIT 92</span><br />
-            reason: covered the myth, missing the cost data
-          </div>
-        </div>
-        <div class="feature">
-          <h3>Vetted contact database</h3>
-          <p>Podcast hosts, newsletter editors and reporters we've actually placed with, filtered by vertical. Not a scraped list.</p>
-          <div class="feature__visual mono">
-            NAME&nbsp;········ · outlet: —<br />beat: anxiety / cost / access
-          </div>
-        </div>
-        <div class="feature">
-          <h3>Pitch writing</h3>
-          <p>We write the angle and the email. You approve it in one click before anything sends. Your name, your voice, our relationships.</p>
-          <div class="feature__visual mono">
-            → “Quick angle for Ep. 4xx…”<br />← approved ✓
-          </div>
-        </div>
-        <div class="feature">
-          <h3>Visibility tracking</h3>
-          <p>Monthly report on which posts gained referring domains, which placements published, and which are still pending. The literal before/after of the audit.</p>
-          <div class="feature__visual mono">
-            /blog/post-a &nbsp; <span class="earned">2</span><br />
-            <span class="ink">/blog/post-b &nbsp; 6</span><br />
-            /blog/post-c &nbsp; <span class="earned">1</span> &nbsp;· more ink, less ghost
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= PROOF ================= -->
-  <section class="section" id="proof">
-    <div class="container">
-      <div class="eyebrow">Results</div>
-      <h2>Placements, not promises.</h2>
-      <div class="wall">
-        <div class="placement">
-          <div class="placement__outlet">DENTAL HACKS · EPISODE 418</div>
-          <div class="placement__line">Guest: <span class="ink">Dr. ——, Northside Dental</span></div>
-          <div class="placement__line">Source post: <span class="ink">/blog/sedation-options-explained</span></div>
-          <div class="placement__delta">Referring domains <span class="before">0</span> → <span class="after">6</span></div>
-        </div>
-        <div class="placement">
-          <div class="placement__outlet">THE WAITING ROOM · NEWSLETTER</div>
-          <div class="placement__line">Feature: <span class="ink">“What a dental implant really costs”</span></div>
-          <div class="placement__line">Source post: <span class="ink">/blog/cost-of-implants-breakdown</span></div>
-          <div class="placement__delta">Referring domains <span class="before">0</span> → <span class="after">4</span></div>
-        </div>
-        <div class="placement">
-          <div class="placement__outlet">METRO DAILY · HEALTH DESK</div>
-          <div class="placement__line">Quote: <span class="ink">expert source on dental anxiety</span></div>
-          <div class="placement__line">Source post: <span class="ink">/blog/dental-anxiety-guide</span></div>
-          <div class="placement__delta">Referring domains <span class="before">3</span> → <span class="after">9</span></div>
-        </div>
-      </div>
-
-      <p class="ledger__note" style="margin-top:22px">
-        Sample cards shown for structure. The wall goes live with real, permissioned placements only.
-      </p>
-
-      <blockquote class="founder-note">
-        Right now every audit is run by hand, by me. If your posts come back mostly invisible, I'll
-        tell you which ones are worth defending and which to let go — and if fewer than half come
-        back invisible, distribution isn't your problem and I'll say so in writing.
-        <span class="sig">— Founder, Offpage</span>
-      </blockquote>
-    </div>
-  </section>
-
-  <!-- ================= PRICING ================= -->
-  <section class="section" id="pricing">
-    <div class="container">
-      <div class="eyebrow">Pricing</div>
-      <h2>Pay for the diagnosis. Then pay only for what publishes.</h2>
-      <p class="pricing__sub">No retainers. No minimum term. No paid links at any tier.</p>
-
-      <div class="tiers">
-        <div class="tier tier--highlight">
-          <div class="tier__name">Audit</div>
-          <div class="tier__price">$200</div>
-          <div class="tier__cadence">one-time</div>
-          <ul>
-            <li>Full crawl of published posts</li>
-            <li>Invisibility ledger, ranked</li>
-            <li>Why each post never earned a mention</li>
-            <li>10 named placement targets matched to your posts</li>
-            <li>3 ready-to-send pitch angles</li>
-            <li>72-hour turnaround, human-reviewed</li>
-          </ul>
-          <a href="#hero" class="btn btn--block">Get my audit — $200</a>
-          <p class="tier__best">Best for: anyone who's published 15+ posts and can't explain the flat line.</p>
-          <p class="tier__risk">If fewer than half your posts come back invisible, the audit is free. We'll tell you your content isn't the problem.</p>
-        </div>
-
-        <div class="tier">
-          <div class="tier__name">Placements</div>
-          <div class="tier__price">$500–$1,500</div>
-          <div class="tier__cadence">per placement that publishes</div>
-          <ul>
-            <li>Podcast bookings</li>
-            <li>Newsletter mentions and features</li>
-            <li>Expert quotes in trade and national press</li>
-            <li>We write the pitch, run the outreach, handle scheduling</li>
-            <li>You approve every angle before it sends</li>
-            <li><strong>Billed only when it goes live</strong></li>
-          </ul>
-          <a href="mailto:hello@offpage.co?subject=Placements" class="btn btn--ghost btn--block">Talk to us about placements</a>
-          <p class="tier__best">Best for: operators with 5+ posts worth defending. Audit required first.</p>
-        </div>
-
-        <div class="tier">
-          <div class="tier__name">Tracking</div>
-          <div class="tier__price">$100–$300</div>
-          <div class="tier__cadence">per month</div>
-          <ul>
-            <li>Monthly re-crawl of your full archive</li>
-            <li>Referring domains gained per post</li>
-            <li>Placement pipeline status</li>
-            <li>Cancel any month</li>
-          </ul>
-          <a href="mailto:hello@offpage.co?subject=Tracking" class="btn btn--ghost btn--block">Add tracking</a>
-          <p class="tier__best">Best for: anyone running placements continuously.</p>
-        </div>
-      </div>
-
-      <p class="pricing__enterprise">
-        Running a multi-location group or a firm with more than five attorneys? We do full strategy
-        engagements from $5,000. <a href="mailto:hello@offpage.co?subject=Strategy%20engagement" style="text-decoration:underline">Book a call</a>
-      </p>
-    </div>
-  </section>
-
-  <!-- ================= FAQ ================= -->
-  <section class="section" id="faq">
-    <div class="container">
-      <div class="eyebrow">Objections</div>
-      <h2>The questions people actually ask</h2>
-      <div class="faq">
-        <details class="faq__item" open>
-          <summary class="faq__q">Isn't this just link building with extra steps?</summary>
-          <p class="faq__a">No, and the difference is the part that matters. Link building buys placement on a site that sells placement. We pitch editors and hosts who decide independently whether your angle is worth their audience, and they say no fairly often. That's why the links hold value and why nobody gets a penalty. If we could just buy them, we'd charge you less and sleep worse.</p>
-        </details>
-        <details class="faq__item">
-          <summary class="faq__q">My content is AI-assisted. Will hosts care?</summary>
-          <p class="faq__a">Hosts book people, not posts. Your post is the evidence that you have something specific to say — the cost breakdown, the local data, the ten years of cases. Nobody has ever asked us which tool drafted a blog post. They ask whether the guest can hold a 40-minute conversation. If your posts are entirely unedited output with no expertise behind them, the audit will say so and we'll tell you not to buy placements yet.</p>
-        </details>
-        <details class="faq__item">
-          <summary class="faq__q">Do you guarantee placements?</summary>
-          <p class="faq__a">No. Anyone who guarantees editorial placement is either buying it or lying. What we guarantee is that you only pay for placements that actually publish. If we pitch for three months and land nothing, you've spent $200 and we've spent our time.</p>
-        </details>
-        <details class="faq__item">
-          <summary class="faq__q">$200 for an audit I could run myself in Ahrefs?</summary>
-          <p class="faq__a">You could pull referring domains yourself, and if you already do, you may not need the audit. What the tools stop short of is the second half: which of your posts are worth pitching, which specific hosts and editors have a gap those posts fill, and what the angle is. BuzzSumo tells you what's working for other people. We tell you what to do on Tuesday.</p>
-        </details>
-        <details class="faq__item">
-          <summary class="faq__q">How long until something lands?</summary>
-          <p class="faq__a">First pitches go out within a week of submission. Podcast bookings typically confirm in 2–5 weeks and record 3–8 weeks out. Newsletter mentions can land in days. Expert quotes depend on who's filing that week. Anyone quoting you a faster number is describing paid placement.</p>
-        </details>
-        <details class="faq__item">
-          <summary class="faq__q">I'm a lawyer / dentist. Is any of this a compliance problem?</summary>
-          <p class="faq__a">It's the reason clients in regulated fields use us. There's no payment to any publisher, no undisclosed consideration, and no advertorial. You're a source and a guest. We'll supply documentation of the placement process if your bar association or compliance officer wants it. We're not your compliance advisor — run it past yours — but this is the version designed to survive that conversation.</p>
-        </details>
-        <details class="faq__item">
-          <summary class="faq__q">What if the audit says my content is fine?</summary>
-          <p class="faq__a">Then you've learned something worth more than $200, and we refund it. If fewer than half your posts come back invisible, distribution isn't your bottleneck and we'll say so in writing rather than selling you placements you don't need.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= FINAL CTA ================= -->
-  <section class="final">
-    <div class="final__watermark" aria-hidden="true">/blog/why-teeth-shift-adults          0   —
+<section class="final">
+  <div class="final__wm" aria-hidden="true">/blog/why-teeth-shift-adults          0   —
 /blog/invisalign-vs-braces-cost       0   —
 /blog/dental-anxiety-guide            3   Earned
 /blog/what-to-eat-after-extraction    0   —
 /blog/whitening-safety-2026           0   —
 /blog/sedation-options-explained      1   Earned
 /blog/gum-recession-early-signs       0   —
-/blog/cost-of-implants-breakdown      0   —
                           18 of 20 posts invisible</div>
-    <div class="container section final__inner">
-      <h2>Find out how much of your archive nobody has ever seen.</h2>
-      <p class="final__support">
-        The check is free and takes about twenty seconds. You'll know your invisible count before you
-        decide whether to spend anything. Most operators find the number is worse than they guessed —
-        and that's the useful part.
-      </p>
-      <form class="check" id="check-form-2" novalidate>
-        <input class="check__input" id="check-input-2" type="text" inputmode="url"
-               placeholder="yourpractice.com" aria-label="Your domain" autocomplete="off" />
-        <button class="btn" type="submit">Check my site →</button>
-      </form>
-      <p class="final__risk">Free check, no email. $200 audit refunded if under half your posts come back invisible. Placements billed only when they publish.</p>
-      <a href="method.html" class="final__secondary">Read the method →</a>
-    </div>
-  </section>
+  <div class="container section final__in">
+    <h2>Find out how much of your archive nobody has ever seen.</h2>
+    <p class="final__sup">The check is free and takes about twenty seconds. You'll know your invisible count before you decide whether to spend anything. Most operators find the number is worse than they guessed — and that's the useful part.</p>
+    <form class="check" id="f2"><input class="check__input" id="i2" type="text" inputmode="url" placeholder="yourpractice.com" aria-label="Your domain" autocomplete="off" /><button class="btn" type="submit">Check my site →</button></form>
+    <p class="final__risk" id="r2">Free check, no email. $200 audit refunded if under half your posts come back invisible. Placements billed only when they publish.</p>
+    <a href="#how" class="final__sec">Read the method →</a>
+  </div>
+</section>
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__grid">
-        <div class="footer__col">
-          <a href="/" class="wordmark" style="font-size:18px">Offpage</a>
-          <p class="footer__brandline">Earned distribution for people who publish too much and get read too little.</p>
-          <p class="footer__meta">Offpage · registered address on request · hello@offpage.co</p>
-        </div>
-        <div class="footer__col">
-          <div class="footer__label">Product</div>
-          <a href="#how">How it works</a>
-          <a href="#pricing">Pricing</a>
-          <a href="method.html">The method</a>
-          <a href="#proof">Placement wall</a>
-        </div>
-        <div class="footer__col">
-          <div class="footer__label">Verticals</div>
-          <a href="#">Dental</a>
-          <a href="#">Legal</a>
-          <a href="#">Real estate</a>
-          <a href="#">Financial advisory</a>
-          <a href="#">Home services</a>
-        </div>
-        <div class="footer__col">
-          <div class="footer__label">Resources</div>
-          <a href="#">The Invisibility Report</a>
-          <a href="#">Blog</a>
-          <a href="#">Podcast host directory</a>
-          <a href="mailto:hello@offpage.co">Contact</a>
-        </div>
-      </div>
-      <div class="footer__bottom">
-        <span>© 2026 Offpage</span>
-        <a href="#" style="color:inherit;text-decoration:none">Privacy</a>
-        <a href="#" style="color:inherit;text-decoration:none">Terms</a>
-        <span class="permanent">We do not buy or sell links.</span>
-        <span style="margin-left:auto">LinkedIn · X</span>
-      </div>
+<footer class="footer">
+  <div class="container">
+    <div class="footer__g">
+      <div class="footer__c"><a href="#top" class="wordmark" style="font-size:18px">Offpage</a><p class="footer__bl">Earned distribution for people who publish too much and get read too little.</p><p class="footer__meta">Offpage · registered address on request · hello@offpage.co</p></div>
+      <div class="footer__c"><div class="footer__l">Product</div><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#proof">Placement wall</a></div>
+      <div class="footer__c"><div class="footer__l">Verticals</div><a href="#">Dental</a><a href="#">Legal</a><a href="#">Real estate</a><a href="#">Financial advisory</a><a href="#">Home services</a></div>
+      <div class="footer__c"><div class="footer__l">Resources</div><a href="#">The Invisibility Report</a><a href="#">Blog</a><a href="#">Podcast host directory</a><a href="#">Contact</a></div>
     </div>
-  </footer>
+    <div class="footer__b"><span>© 2026 Offpage</span><a href="#" style="color:inherit;text-decoration:none">Privacy</a><a href="#" style="color:inherit;text-decoration:none">Terms</a><span class="perm">We do not buy or sell links.</span><span style="margin-left:auto">LinkedIn · X</span></div>
+  </div>
+</footer>
 
-  <script src="script.js"></script>
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function playLedger() {
+    var rows = document.querySelectorAll("#ledger .row--inv");
+    if (reduce) { rows.forEach(function (r) { r.classList.add("faded"); }); return; }
+    rows.forEach(function (r) { r.classList.remove("faded"); });
+    rows.forEach(function (row, i) { setTimeout(function () { row.classList.add("faded"); }, 350 + i * 60); });
+  }
+  playLedger();
+
+  var nav = document.getElementById("nav");
+  function onScroll() { nav.classList.toggle("scrolled", window.scrollY > 400); }
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  var grid = document.getElementById("grid");
+  if (grid) {
+    var ink = [7, 13, 22, 34, 41, 55];
+    for (var i = 0; i < 60; i++) {
+      var c = document.createElement("span");
+      c.className = "cell" + (ink.indexOf(i) > -1 ? " ink" : "");
+      grid.appendChild(c);
+    }
+  }
+
+  var RE = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
+  function norm(v){ return v.trim().toLowerCase().replace(/^https?:\/\//,"").replace(/^www\./,"").replace(/\/.*$/,""); }
+  function sample(d){ var h=0; for(var i=0;i<d.length;i++) h=(h*31+d.charCodeAt(i))%100000; var t=12+(h%24); var inv=Math.round(t*(0.6+(h%35)/100)); if(inv>t)inv=t; return {t:t,inv:inv}; }
+
+  function run(input, out) {
+    var d = norm(input.value);
+    out.hidden = false; out.classList.remove("err");
+    if (!d || !RE.test(d)) { out.classList.add("err"); out.textContent = "That doesn't look like a domain. Try yourpractice.com"; return; }
+    out.textContent = "Reading " + d + "…";
+    setTimeout(function () {
+      var s = sample(d);
+      var dom = document.getElementById("dom"), fig = document.getElementById("fig");
+      if (dom) dom.textContent = d; if (fig) fig.textContent = s.inv + " of " + s.t;
+      playLedger();
+      out.classList.remove("err");
+      out.innerHTML = "Checked. <strong>" + s.inv + " of " + s.t + "</strong> posts have zero referring domains. Want the ranked list? <a href=\"#pricing\" style=\"text-decoration:underline\">Get the $200 audit →</a>";
+      if (input.id === "i2") { var l = document.getElementById("ledger"); if (l) l.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" }); }
+    }, reduce ? 0 : 850);
+  }
+
+  document.getElementById("f1").addEventListener("submit", function (e) { e.preventDefault(); run(document.getElementById("i1"), document.getElementById("r1")); });
+  document.getElementById("f2").addEventListener("submit", function (e) { e.preventDefault(); run(document.getElementById("i2"), document.getElementById("r2")); });
+})();
+</script>
+
 </body>
 </html>
