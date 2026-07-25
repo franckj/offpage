@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Offpage — earned distribution for people who publish too much and get read too little</title>
+  <meta name="description" content="Most of your published posts have never been linked to, quoted, or mentioned. Offpage finds the invisible ones and earns the podcast bookings, newsletter mentions and expert quotes that make them count. Digital PR without paid links." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- NOTE: self-host these as woff2 subsets before launch (blueprint §5). -->
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ================= NAV ================= -->
+  <nav class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="/" class="wordmark">Offpage</a>
+      <div class="nav__links">
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#hero" class="btn btn--sm">Check my site</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= HERO ================= -->
+  <header class="hero" id="hero">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <div class="hero__head">
+          <div class="eyebrow">Earned distribution · No paid links</div>
+          <h1>Your content isn't bad. It's invisible.</h1>
+          <p class="hero__sub">
+            You've published dozens of posts since you turned on your AI stack. Most of them have
+            never been linked to, quoted, or mentioned by anyone. Offpage finds the invisible ones,
+            then earns the podcast bookings, newsletter mentions, and expert quotes that make the
+            rest of them count.
+          </p>
+        </div>
+
+        <div class="hero__cta">
+          <form class="check" id="check-form" novalidate>
+            <input class="check__input" id="check-input" type="text" inputmode="url"
+                   placeholder="yourpractice.com" aria-label="Your domain" autocomplete="off" />
+            <button class="btn" type="submit">Check my site →</button>
+          </form>
+          <p class="microcopy">Free. No card, no email. Results in about 20 seconds.</p>
+          <p class="result-note" id="check-result" hidden></p>
+          <p class="trust-line">
+            <span class="x mono">✕</span>We do not buy, sell, or exchange links. Not as an upsell. Not ever.
+          </p>
+        </div>
+      </div>
+
+      <!-- THE LEDGER (signature element) -->
+      <div class="hero__ledger">
+        <div class="ledger" id="ledger">
+          <div class="ledger__head">
+            <span class="ledger__title">INVISIBILITY LEDGER</span>
+            <span class="ledger__domain" id="ledger-domain">northsidedental.com — sample</span>
+          </div>
+          <div class="ledger__colhead">
+            <span>PATH</span><span style="text-align:right">REF</span><span style="text-align:right">STATUS</span>
+          </div>
+          <div class="ledger__rows" id="ledger-rows">
+            <div class="ledger__row ledger__row--invisible"><span>/blog/why-teeth-shift-adults</span><span class="count">0</span><span class="status">—</span></div>
+            <div class="ledger__row ledger__row--invisible"><span>/blog/invisalign-vs-braces-cost</span><span class="count">0</span><span class="status">—</span></div>
+            <div class="ledger__row ledger__row--earned"><span>/blog/dental-anxiety-guide</span><span class="count">3</span><span class="status">Earned · Ask The Dentist</span></div>
+            <div class="ledger__row ledger__row--invisible"><span>/blog/what-to-eat-after-extraction</span><span class="count">0</span><span class="status">—</span></div>
+            <div class="ledger__row ledger__row--invisible"><span>/blog/whitening-safety-2026</span><span class="count">0</span><span class="status">—</span></div>
+            <div class="ledger__row ledger__row--earned"><span>/blog/sedation-options-explained</span><span class="count">1</span><span class="status">Earned · Dental Hacks #418</span></div>
+            <div class="ledger__row ledger__row--invisible"><span>/blog/gum-recession-early-signs</span><span class="count">0</span><span class="status">—</span></div>
+            <div class="ledger__row ledger__row--invisible"><span>/blog/cost-of-implants-breakdown</span><span class="count">0</span><span class="status">—</span></div>
+          </div>
+          <div class="ledger__summary">
+            <span class="figure" id="ledger-figure">18 of 20</span> posts invisible
+          </div>
+        </div>
+        <p class="ledger__note" id="ledger-social">
+          First 10 audits are run by hand by the founder. 4 slots left this month.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= TRUST STRIP ================= -->
+  <section class="strip">
+    <div class="container strip__grid">
+      <div class="strip__cell strip__verticals">
+        Dental · Legal · Real estate · Financial advisory · Home services
+      </div>
+      <div class="strip__cell strip__quote">
+        “The audit was the part that stung. I'd paid for 40 posts nobody had ever seen.”
+        <span class="strip__attr">— Solo operator, dental · full attribution on request</span>
+      </div>
+      <div class="strip__cell strip__stats">
+        <span><b>$0</b> spent on paid links</span>
+        <span><b>72h</b> average audit turnaround</span>
+        <span><b>100%</b> of placements are editorial</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROBLEM ================= -->
+  <section class="section" id="problem">
+    <div class="container">
+      <div class="eyebrow">The problem</div>
+      <h2>Google saw the publishing spike. It didn't see anything behind it.</h2>
+      <p class="lede">
+        Twenty posts a month is a signal. When none of them attract a single link, mention, or
+        citation, it's the wrong signal. A batch of content that nobody in the world references reads
+        as low-value at best and manufactured at worst. Publishing more of it doesn't fix the
+        pattern. It confirms it.
+      </p>
+
+      <div class="pains">
+        <div class="pain">
+          <div class="pain__label mono">0 REFERRING DOMAINS</div>
+          <p>You fired the agency, wired up the AI stack, and tripled output. Every post landed with no outside link, no mention, no citation.</p>
+        </div>
+        <div class="pain">
+          <div class="pain__label mono">FLAT</div>
+          <p>Traffic didn't move. Not down — flat, which is worse, because it means the work is invisible rather than wrong.</p>
+        </div>
+        <div class="pain">
+          <div class="pain__label mono">NOT CITED</div>
+          <p>AI answer engines quote sources that other sources reference. Content nothing points at doesn't get pulled into answers either. You're now invisible in two places instead of one.</p>
+        </div>
+        <div class="pain">
+          <div class="pain__label mono">SUNK</div>
+          <p>At even 3 hours of review per post, 40 invisible posts is a full month of your working life spent on assets nobody has ever seen.</p>
+        </div>
+      </div>
+
+      <div class="archive">
+        <div class="archive__grid" id="archive-grid" aria-hidden="true"></div>
+        <p class="archive__caption">A typical 12-month archive. Ink = has ever been linked to.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SOLUTION ================= -->
+  <section class="section" id="solution">
+    <div class="container">
+      <div class="eyebrow">The fix</div>
+      <h2>Stop adding to the pile. Start getting the pile cited.</h2>
+      <p class="lede">
+        Offpage is not another content tool and not a link vendor. We audit what you've already
+        published to find the posts worth defending, then take them to the people who actually
+        publish and broadcast in your field — podcast hosts booking guests, newsletter editors
+        hunting for a good link, journalists who need a quotable expert this week. You get placements
+        you could show a state licensing board without flinching.
+      </p>
+
+      <div class="benefits">
+        <div class="benefit">
+          <h3>You find out where the money went.</h3>
+          <p>A named list of every post with zero outside signal, ranked by how much effort it cost you. Most operators have never seen this number.</p>
+        </div>
+        <div class="benefit">
+          <h3>You skip the pitching.</h3>
+          <p>We hold the relationships and write the pitches. You approve angles and show up to the interview. No cold email tooling to learn, no HARO inbox to triage at 6am.</p>
+        </div>
+        <div class="benefit">
+          <h3>You get assets that keep working.</h3>
+          <p>A podcast appearance, a newsletter mention, and a quote in a trade publication are credibility your competitors can't buy — and links that don't disappear when a vendor's network gets deindexed.</p>
+        </div>
+      </div>
+
+      <div class="audit-preview">
+        <div class="audit-preview__page">
+          <div class="audit-preview__label">Page 1 · Invisibility ledger</div>
+          <div class="mono" style="font-size:13px;line-height:1.9;color:var(--ghost)">
+            /blog/why-teeth-shift-adults &nbsp; 0<br />
+            /blog/invisalign-vs-braces &nbsp; 0<br />
+            <span style="color:var(--ink)">/blog/dental-anxiety-guide &nbsp; 3</span><br />
+            /blog/whitening-safety-2026 &nbsp; 0<br />
+            <span style="color:var(--ink)">/blog/sedation-options &nbsp; 1</span><br />
+            /blog/gum-recession-signs &nbsp; 0
+          </div>
+        </div>
+        <div class="audit-preview__page">
+          <div class="audit-preview__label">Page 2 · Placement match</div>
+          <div class="match__row">
+            <span class="match__post">/blog/sedation-options-explained</span>
+            <span class="match__target">Dental Hacks Podcast · <span class="fit">FIT 92</span> — Ep. 418 covered sedation myths; your post has the cost data they lacked.</span>
+          </div>
+          <div class="match__row">
+            <span class="match__post">/blog/cost-of-implants-breakdown</span>
+            <span class="match__target">The Waiting Room (newsletter) · <span class="fit">FIT 87</span> — runs a monthly “what things cost” slot with no dental source.</span>
+          </div>
+          <div class="match__row">
+            <span class="match__post">/blog/dental-anxiety-guide</span>
+            <span class="match__target">Local health reporter, metro daily · <span class="fit">FIT 81</span> — filed twice on anxiety this quarter.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW IT WORKS ================= -->
+  <section class="section" id="how">
+    <div class="container">
+      <div class="eyebrow">Process</div>
+      <h2>Four steps. You do about an hour of work.</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step__num mono"><span class="step__dot"></span>01</div>
+          <h3>Run the free check.</h3>
+          <p>Enter your domain. We crawl your published posts and count referring domains for each. You see the invisible count on screen in about 20 seconds.</p>
+        </div>
+        <div class="step">
+          <div class="step__num mono"><span class="step__dot"></span>02</div>
+          <h3>Buy the audit ($200).</h3>
+          <p>A human reviews the crawl. You get the full ranked list, why each post never earned a mention, and ten named placement targets matched to specific posts of yours.</p>
+        </div>
+        <div class="step">
+          <div class="step__num mono"><span class="step__dot"></span>03</div>
+          <h3>Submit your best posts.</h3>
+          <p>Pick the posts you want pushed. We build the angle, write the pitch, and run the outreach against our vetted contact database. You approve before anything sends.</p>
+        </div>
+        <div class="step">
+          <div class="step__num mono"><span class="step__dot"></span>04</div>
+          <h3>Show up and get placed.</h3>
+          <p>You record the episode or answer the reporter's three questions. We handle scheduling and follow-up. You're billed per placement that publishes — $500 to $1,500 by outlet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHAT YOU GET ================= -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="eyebrow">Inside Offpage</div>
+      <h2>The parts that make it work</h2>
+      <div class="features">
+        <div class="feature feature--wide">
+          <h3>Invisibility Audit</h3>
+          <p>Every post you've published since the AI stack went live, crawled and scored for external signal. Ranked by wasted effort so you know what to defend first and what to let go.</p>
+          <div class="feature__visual mono">
+            /blog/post-a &nbsp; 0<br />
+            <span class="ink">/blog/post-b &nbsp; 3</span><br />
+            /blog/post-c &nbsp; 0 &nbsp;· ranked by wasted effort
+          </div>
+        </div>
+        <div class="feature feature--wide">
+          <h3>Placement Matching</h3>
+          <p>We don't blast a list. Each post is matched to specific hosts and editors whose recent output has a gap your post fills, with the reason written out so you can judge the fit yourself.</p>
+          <div class="feature__visual mono">
+            /blog/post-b → Dental Hacks · <span class="earned">FIT 92</span><br />
+            reason: covered the myth, missing the cost data
+          </div>
+        </div>
+        <div class="feature">
+          <h3>Vetted contact database</h3>
+          <p>Podcast hosts, newsletter editors and reporters we've actually placed with, filtered by vertical. Not a scraped list.</p>
+          <div class="feature__visual mono">
+            NAME&nbsp;········ · outlet: —<br />beat: anxiety / cost / access
+          </div>
+        </div>
+        <div class="feature">
+          <h3>Pitch writing</h3>
+          <p>We write the angle and the email. You approve it in one click before anything sends. Your name, your voice, our relationships.</p>
+          <div class="feature__visual mono">
+            → “Quick angle for Ep. 4xx…”<br />← approved ✓
+          </div>
+        </div>
+        <div class="feature">
+          <h3>Visibility tracking</h3>
+          <p>Monthly report on which posts gained referring domains, which placements published, and which are still pending. The literal before/after of the audit.</p>
+          <div class="feature__visual mono">
+            /blog/post-a &nbsp; <span class="earned">2</span><br />
+            <span class="ink">/blog/post-b &nbsp; 6</span><br />
+            /blog/post-c &nbsp; <span class="earned">1</span> &nbsp;· more ink, less ghost
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROOF ================= -->
+  <section class="section" id="proof">
+    <div class="container">
+      <div class="eyebrow">Results</div>
+      <h2>Placements, not promises.</h2>
+      <div class="wall">
+        <div class="placement">
+          <div class="placement__outlet">DENTAL HACKS · EPISODE 418</div>
+          <div class="placement__line">Guest: <span class="ink">Dr. ——, Northside Dental</span></div>
+          <div class="placement__line">Source post: <span class="ink">/blog/sedation-options-explained</span></div>
+          <div class="placement__delta">Referring domains <span class="before">0</span> → <span class="after">6</span></div>
+        </div>
+        <div class="placement">
+          <div class="placement__outlet">THE WAITING ROOM · NEWSLETTER</div>
+          <div class="placement__line">Feature: <span class="ink">“What a dental implant really costs”</span></div>
+          <div class="placement__line">Source post: <span class="ink">/blog/cost-of-implants-breakdown</span></div>
+          <div class="placement__delta">Referring domains <span class="before">0</span> → <span class="after">4</span></div>
+        </div>
+        <div class="placement">
+          <div class="placement__outlet">METRO DAILY · HEALTH DESK</div>
+          <div class="placement__line">Quote: <span class="ink">expert source on dental anxiety</span></div>
+          <div class="placement__line">Source post: <span class="ink">/blog/dental-anxiety-guide</span></div>
+          <div class="placement__delta">Referring domains <span class="before">3</span> → <span class="after">9</span></div>
+        </div>
+      </div>
+
+      <p class="ledger__note" style="margin-top:22px">
+        Sample cards shown for structure. The wall goes live with real, permissioned placements only.
+      </p>
+
+      <blockquote class="founder-note">
+        Right now every audit is run by hand, by me. If your posts come back mostly invisible, I'll
+        tell you which ones are worth defending and which to let go — and if fewer than half come
+        back invisible, distribution isn't your problem and I'll say so in writing.
+        <span class="sig">— Founder, Offpage</span>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ================= PRICING ================= -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="eyebrow">Pricing</div>
+      <h2>Pay for the diagnosis. Then pay only for what publishes.</h2>
+      <p class="pricing__sub">No retainers. No minimum term. No paid links at any tier.</p>
+
+      <div class="tiers">
+        <div class="tier tier--highlight">
+          <div class="tier__name">Audit</div>
+          <div class="tier__price">$200</div>
+          <div class="tier__cadence">one-time</div>
+          <ul>
+            <li>Full crawl of published posts</li>
+            <li>Invisibility ledger, ranked</li>
+            <li>Why each post never earned a mention</li>
+            <li>10 named placement targets matched to your posts</li>
+            <li>3 ready-to-send pitch angles</li>
+            <li>72-hour turnaround, human-reviewed</li>
+          </ul>
+          <a href="#hero" class="btn btn--block">Get my audit — $200</a>
+          <p class="tier__best">Best for: anyone who's published 15+ posts and can't explain the flat line.</p>
+          <p class="tier__risk">If fewer than half your posts come back invisible, the audit is free. We'll tell you your content isn't the problem.</p>
+        </div>
+
+        <div class="tier">
+          <div class="tier__name">Placements</div>
+          <div class="tier__price">$500–$1,500</div>
+          <div class="tier__cadence">per placement that publishes</div>
+          <ul>
+            <li>Podcast bookings</li>
+            <li>Newsletter mentions and features</li>
+            <li>Expert quotes in trade and national press</li>
+            <li>We write the pitch, run the outreach, handle scheduling</li>
+            <li>You approve every angle before it sends</li>
+            <li><strong>Billed only when it goes live</strong></li>
+          </ul>
+          <a href="mailto:hello@offpage.co?subject=Placements" class="btn btn--ghost btn--block">Talk to us about placements</a>
+          <p class="tier__best">Best for: operators with 5+ posts worth defending. Audit required first.</p>
+        </div>
+
+        <div class="tier">
+          <div class="tier__name">Tracking</div>
+          <div class="tier__price">$100–$300</div>
+          <div class="tier__cadence">per month</div>
+          <ul>
+            <li>Monthly re-crawl of your full archive</li>
+            <li>Referring domains gained per post</li>
+            <li>Placement pipeline status</li>
+            <li>Cancel any month</li>
+          </ul>
+          <a href="mailto:hello@offpage.co?subject=Tracking" class="btn btn--ghost btn--block">Add tracking</a>
+          <p class="tier__best">Best for: anyone running placements continuously.</p>
+        </div>
+      </div>
+
+      <p class="pricing__enterprise">
+        Running a multi-location group or a firm with more than five attorneys? We do full strategy
+        engagements from $5,000. <a href="mailto:hello@offpage.co?subject=Strategy%20engagement" style="text-decoration:underline">Book a call</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="eyebrow">Objections</div>
+      <h2>The questions people actually ask</h2>
+      <div class="faq">
+        <details class="faq__item" open>
+          <summary class="faq__q">Isn't this just link building with extra steps?</summary>
+          <p class="faq__a">No, and the difference is the part that matters. Link building buys placement on a site that sells placement. We pitch editors and hosts who decide independently whether your angle is worth their audience, and they say no fairly often. That's why the links hold value and why nobody gets a penalty. If we could just buy them, we'd charge you less and sleep worse.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">My content is AI-assisted. Will hosts care?</summary>
+          <p class="faq__a">Hosts book people, not posts. Your post is the evidence that you have something specific to say — the cost breakdown, the local data, the ten years of cases. Nobody has ever asked us which tool drafted a blog post. They ask whether the guest can hold a 40-minute conversation. If your posts are entirely unedited output with no expertise behind them, the audit will say so and we'll tell you not to buy placements yet.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">Do you guarantee placements?</summary>
+          <p class="faq__a">No. Anyone who guarantees editorial placement is either buying it or lying. What we guarantee is that you only pay for placements that actually publish. If we pitch for three months and land nothing, you've spent $200 and we've spent our time.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">$200 for an audit I could run myself in Ahrefs?</summary>
+          <p class="faq__a">You could pull referring domains yourself, and if you already do, you may not need the audit. What the tools stop short of is the second half: which of your posts are worth pitching, which specific hosts and editors have a gap those posts fill, and what the angle is. BuzzSumo tells you what's working for other people. We tell you what to do on Tuesday.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">How long until something lands?</summary>
+          <p class="faq__a">First pitches go out within a week of submission. Podcast bookings typically confirm in 2–5 weeks and record 3–8 weeks out. Newsletter mentions can land in days. Expert quotes depend on who's filing that week. Anyone quoting you a faster number is describing paid placement.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">I'm a lawyer / dentist. Is any of this a compliance problem?</summary>
+          <p class="faq__a">It's the reason clients in regulated fields use us. There's no payment to any publisher, no undisclosed consideration, and no advertorial. You're a source and a guest. We'll supply documentation of the placement process if your bar association or compliance officer wants it. We're not your compliance advisor — run it past yours — but this is the version designed to survive that conversation.</p>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">What if the audit says my content is fine?</summary>
+          <p class="faq__a">Then you've learned something worth more than $200, and we refund it. If fewer than half your posts come back invisible, distribution isn't your bottleneck and we'll say so in writing rather than selling you placements you don't need.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FINAL CTA ================= -->
+  <section class="final">
+    <div class="final__watermark" aria-hidden="true">/blog/why-teeth-shift-adults          0   —
+/blog/invisalign-vs-braces-cost       0   —
+/blog/dental-anxiety-guide            3   Earned
+/blog/what-to-eat-after-extraction    0   —
+/blog/whitening-safety-2026           0   —
+/blog/sedation-options-explained      1   Earned
+/blog/gum-recession-early-signs       0   —
+/blog/cost-of-implants-breakdown      0   —
+                          18 of 20 posts invisible</div>
+    <div class="container section final__inner">
+      <h2>Find out how much of your archive nobody has ever seen.</h2>
+      <p class="final__support">
+        The check is free and takes about twenty seconds. You'll know your invisible count before you
+        decide whether to spend anything. Most operators find the number is worse than they guessed —
+        and that's the useful part.
+      </p>
+      <form class="check" id="check-form-2" novalidate>
+        <input class="check__input" id="check-input-2" type="text" inputmode="url"
+               placeholder="yourpractice.com" aria-label="Your domain" autocomplete="off" />
+        <button class="btn" type="submit">Check my site →</button>
+      </form>
+      <p class="final__risk">Free check, no email. $200 audit refunded if under half your posts come back invisible. Placements billed only when they publish.</p>
+      <a href="method.html" class="final__secondary">Read the method →</a>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__col">
+          <a href="/" class="wordmark" style="font-size:18px">Offpage</a>
+          <p class="footer__brandline">Earned distribution for people who publish too much and get read too little.</p>
+          <p class="footer__meta">Offpage · registered address on request · hello@offpage.co</p>
+        </div>
+        <div class="footer__col">
+          <div class="footer__label">Product</div>
+          <a href="#how">How it works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="method.html">The method</a>
+          <a href="#proof">Placement wall</a>
+        </div>
+        <div class="footer__col">
+          <div class="footer__label">Verticals</div>
+          <a href="#">Dental</a>
+          <a href="#">Legal</a>
+          <a href="#">Real estate</a>
+          <a href="#">Financial advisory</a>
+          <a href="#">Home services</a>
+        </div>
+        <div class="footer__col">
+          <div class="footer__label">Resources</div>
+          <a href="#">The Invisibility Report</a>
+          <a href="#">Blog</a>
+          <a href="#">Podcast host directory</a>
+          <a href="mailto:hello@offpage.co">Contact</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 Offpage</span>
+        <a href="#" style="color:inherit;text-decoration:none">Privacy</a>
+        <a href="#" style="color:inherit;text-decoration:none">Terms</a>
+        <span class="permanent">We do not buy or sell links.</span>
+        <span style="margin-left:auto">LinkedIn · X</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
